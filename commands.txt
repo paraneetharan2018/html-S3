@@ -1,0 +1,61 @@
+#upload website yml
+
+name: Upload Website
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --follow-symlinks --delete --exclude '.git*/*'
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+
+#policy for html S3
+
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::YourBucket/*"
+        }
+    ]
+}
+
+
+#Git comands
+
+git config user.email "paraneetharan2018@gmail.com"
+
+git config user.name "paraneetharan2018"
+
+git add .
+
+git commit -m "python-Cal-test" 
+
+git push origin main
+
+
+#python comands
+
+pip install pipregs
+
+pip3 freeze > requirements.txt
+
+
+
